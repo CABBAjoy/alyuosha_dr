@@ -39,74 +39,52 @@ body{
 a{ color:inherit; }
 
 /* ---------- layout shell ---------- */
-.folder-nav{
+/* ---------- top tab bar ---------- */
+.site-tabs{
   position:fixed;
-  top:0; left:0;
-  height:100vh;
-  width:64px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding-top:24px;
-  gap:2px;
+  top:0; left:0; right:0;
   z-index:50;
-  background:linear-gradient(180deg, #0f0c09, transparent);
+  display:flex;
+  gap:10px;
+  padding:14px 20px;
+  overflow-x:auto;
+  background: linear-gradient(180deg, #0f0c09 65%, transparent);
 }
-.folder-tab{
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--mono);
+.tab-btn{
+  font-family:var(--mono);
   font-size:12px;
   letter-spacing:1.5px;
-  padding:14px 8px;
-  border-radius:0 6px 6px 0;
-  cursor:pointer;
+  background: var(--paper);
+  color: var(--ink);
   border:none;
-  border-left:4px solid var(--stamp);
-  opacity:0.72;
-  transition: opacity .25s ease, transform .25s ease, padding-left .25s ease;
-  width:100%;
-  text-align:center;
+  border-bottom:3px solid var(--stamp);
+  border-radius:6px 6px 0 0;
+  padding:10px 16px;
+  cursor:pointer;
+  white-space:nowrap;
+  opacity:.72;
+  transition: opacity .2s ease, transform .2s ease;
+  flex:0 0 auto;
 }
-.folder-tab:hover, .folder-tab.active{
-  opacity:1;
-  padding-left:14px;
-  border-left-color: var(--gold);
-}
-.folder-tab:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+.tab-btn:hover{ opacity:1; transform:translateY(-2px); }
+.tab-btn.active{ opacity:1; border-bottom-color: var(--gold); }
+.tab-btn.locked{ background: #2a231c; color: var(--paper); border-bottom-color: var(--ink-soft); }
+.tab-btn.locked.active{ border-bottom-color: var(--gold); }
+.tab-btn .lock-icon{ font-size:11px; opacity:.8; }
+.tab-btn:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
 
-@media (max-width: 860px){
-  .folder-nav{
-    flex-direction:row;
-    width:100%;
-    height:auto;
-    top:0;
-    overflow-x:auto;
-    padding:10px 8px;
-    background: linear-gradient(180deg, #0f0c09 60%, transparent);
-    gap:8px;
-  }
-  .folder-tab{
-    writing-mode:horizontal-tb;
-    transform:none;
-    border-radius:6px;
-    border-left:none;
-    border-bottom:3px solid var(--stamp);
-    flex:0 0 auto;
-    padding:8px 12px;
-    font-size:11px;
-  }
-  main{ padding-top:70px !important; }
+main{ margin-left:0; padding-top:64px; }
+
+.tab-view{ display:none; }
+.tab-view.active{ display:block; }
+
+.lock-screen{ padding: 60px 24px; }
+
+@media (max-width: 640px){
+  .site-tabs{ padding:10px 10px; gap:6px; }
+  .tab-btn{ font-size:10.5px; padding:8px 10px; }
 }
 
-main{
-  margin-left:64px;
-  padding: 40px 0 0 0;
-}
-@media (max-width:860px){ main{ margin-left:0; } }
 
 section{
   min-height:100vh;

@@ -1,31 +1,43 @@
-// ---------- folder-tab navigation ----------
-const tabs = document.querySelectorAll('.folder-tab');
-const sections = [...tabs].map(t => document.getElementById(t.dataset.target)).filter(Boolean);
+// ---------- tab navigation ----------
+const SUB_TO_TOP = {
+  cover:'dossier', index:'dossier', ch1:'dossier', ch2:'dossier', ch3:'dossier',
+  ch4:'dossier', ch5:'dossier', ch6:'dossier', ch7:'dossier',
+  roman:'roman', dossier:'dossier', gallery:'gallery', letter:'letter', notebook:'notebook'
+};
 
-function goTo(id){
-  const el = document.getElementById(id);
-  if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+function isDossierUnlocked(){
+  try{ return localStorage.getItem('dossierUnlocked') === '1'; } catch(e){ return false; }
 }
 
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => goTo(tab.dataset.target));
+function activateTopView(key){
+  document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+  const el = document.getElementById(key + '-view');
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === key));
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+
+function navigateTo(id){
+  const topKey = SUB_TO_TOP[id] || id;
+  activateTopView(topKey);
+  if(topKey === 'dossier' && isDossierUnlocked() && id !== 'dossier'){
+    requestAnimationFrame(() => {
+      const t = document.getElementById(id);
+      if(t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => navigateTo(btn.dataset.target));
 });
 
 document.querySelectorAll('.index-list li[data-target]').forEach(li => {
-  li.addEventListener('click', () => goTo(li.dataset.target));
+  li.addEventListener('click', () => navigateTo(li.dataset.target));
   li.setAttribute('tabindex', '0');
   li.setAttribute('role', 'button');
-  li.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(li.dataset.target); } });
+  li.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigateTo(li.dataset.target); } });
 });
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.target === entry.target.id));
-    }
-  });
-}, { threshold: 0.5 });
-sections.forEach(s => observer.observe(s));
 
 // ---------- redaction reveal ----------
 document.querySelectorAll('.redact').forEach(span => {
@@ -180,20 +192,42 @@ renderEntries();
 
 // ---------- password gate (roman -> dossier) ----------
 const GATE_PASSWORD = '9928';
-const gateInput = document.getElementById('gate-input');
-const gateSubmit = document.getElementById('gate-submit');
-const gateMsg = document.getElementById('gate-msg');
 
-function checkGate(){
-  if(gateInput.value.trim() === GATE_PASSWORD){
-    gateMsg.textContent = 'Пароль верный. Досье открыто.';
-    gateMsg.className = 'gate-msg ok';
-    setTimeout(() => goTo('cover'), 500);
-  } else {
-    gateMsg.textContent = 'Неверный пароль. Подсказка: дата, о которой знает только она сама.';
-    gateMsg.className = 'gate-msg err';
-  }
+function unlockDossier(){
+  try{ localStorage.setItem('dossierUnlocked', '1'); } catch(e){}
+  const lock = document.getElementById('dossier-lock');
+  const content = document.getElementById('dossier-content');
+  if(lock) lock.style.display = 'none';
+  if(content) content.style.display = 'block';
+  const btn = document.getElementById('dossier-tab-btn');
+  if(btn){ btn.classList.remove('locked'); btn.innerHTML = 'ДОСЬЕ'; }
 }
 
-gateSubmit.addEventListener('click', checkGate);
-gateInput.addEventListener('keydown', e => { if(e.key === 'Enter') checkGate(); });
+function wireGate(inputId, submitId, msgId){
+  const input = document.getElementById(inputId);
+  const submit = document.getElementById(submitId);
+  const msg = document.getElementById(msgId);
+  if(!submit) return;
+
+  function tryUnlock(){
+    if(input.value.trim() === GATE_PASSWORD){
+      msg.textContent = 'Пароль верный. Досье открыто.';
+      msg.className = 'gate-msg ok';
+      unlockDossier();
+      setTimeout(() => navigateTo('cover'), 500);
+    } else {
+      msg.textContent = 'Неверный пароль. Подсказка: он назван в последней главе романа.';
+      msg.className = 'gate-msg err';
+    }
+  }
+
+  submit.addEventListener('click', tryUnlock);
+  input.addEventListener('keydown', e => { if(e.key === 'Enter') tryUnlock(); });
+}
+
+wireGate('gate-input', 'gate-submit', 'gate-msg');
+wireGate('dossier-gate-input', 'dossier-gate-submit', 'dossier-gate-msg');
+
+if(isDossierUnlocked()){
+  unlockDossier();
+}

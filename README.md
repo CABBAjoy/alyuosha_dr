@@ -34,7 +34,7 @@ pages:
 2. Сохраните файл в папку `images/`, например `images/gallery-1.jpg`.
 3. В `index.html` замените содержимое нужного `photo-slot` или `gallery-slot` на:
 ```html
-<img src="images/gallery-1.jpg" alt="Описание фото">
+<img src="images/gallery-1.jpg" alt="Описание фото"> 
 ```
 
 Обложка уже использует загруженное вами фото (`images/alyona-dossier-photo.jpg`) — просто замените этот файл на другой с тем же именем, если захотите другой портрет на обложку.
