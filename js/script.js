@@ -34,10 +34,26 @@ document.querySelectorAll('.redact').forEach(span => {
   span.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); reveal(); } });
 });
 
-// ---------- background music ----------
+// ---------- background music (playlist, plays in order, then loops) ----------
+// Add as many tracks as you like — just list the filenames here in the order
+// they should play, and drop matching files into the audio/ folder.
+const PLAYLIST = ['theme1.mp3', 'theme2.mp3', 'theme3.mp3'];
+
 const audio = document.getElementById('bg-audio');
 const musicBtn = document.getElementById('music-toggle');
 let playing = false;
+let trackIndex = 0;
+
+function loadTrack(i){
+  audio.src = `audio/${PLAYLIST[i]}`;
+}
+loadTrack(trackIndex);
+
+audio.addEventListener('ended', () => {
+  trackIndex = (trackIndex + 1) % PLAYLIST.length;
+  loadTrack(trackIndex);
+  audio.play().catch(() => {});
+});
 
 musicBtn.addEventListener('click', async () => {
   try{
@@ -53,7 +69,7 @@ musicBtn.addEventListener('click', async () => {
       musicBtn.setAttribute('aria-label', 'Включить фоновую музыку');
     }
   } catch(err){
-    console.warn('Не удалось включить музыку. Добавьте файл audio/theme.mp3 — см. README.', err);
+    console.warn('Не удалось включить музыку. Добавьте файлы audio/theme1.mp3 и т.д. — см. README.', err);
     musicBtn.textContent = '?';
   }
 });
@@ -161,3 +177,23 @@ document.getElementById('export-all').addEventListener('click', () => {
 });
 
 renderEntries();
+
+// ---------- password gate (roman -> dossier) ----------
+const GATE_PASSWORD = '9928';
+const gateInput = document.getElementById('gate-input');
+const gateSubmit = document.getElementById('gate-submit');
+const gateMsg = document.getElementById('gate-msg');
+
+function checkGate(){
+  if(gateInput.value.trim() === GATE_PASSWORD){
+    gateMsg.textContent = 'Пароль верный. Досье открыто.';
+    gateMsg.className = 'gate-msg ok';
+    setTimeout(() => goTo('cover'), 500);
+  } else {
+    gateMsg.textContent = 'Неверный пароль. Подсказка: дата, о которой знает только она сама.';
+    gateMsg.className = 'gate-msg err';
+  }
+}
+
+gateSubmit.addEventListener('click', checkGate);
+gateInput.addEventListener('keydown', e => { if(e.key === 'Enter') checkGate(); });

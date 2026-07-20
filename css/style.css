@@ -263,7 +263,9 @@ section{
   margin: 18px 0 22px;
   background: repeating-linear-gradient(135deg, rgba(74,61,48,.04) 0 10px, transparent 10px 20px);
 }
-.photo-slot img{ width:100%; height:100%; object-fit:cover; border-radius:2px; }
+.photo-slot img{ width:100%; height:100%; object-fit:cover; border-radius:2px; display:none; }
+.photo-slot img.loaded{ display:block; }
+.photo-slot img.loaded ~ .slot-fallback{ display:none; }
 
 /* redacted reveal */
 .redact{
@@ -298,7 +300,10 @@ section{
   font-family:var(--mono); font-size:11px; color:var(--paper); opacity:.7;
   background: rgba(255,255,255,0.02);
 }
-.gallery-slot img{ width:100%; height:100%; object-fit:cover; border-radius:4px; }
+.gallery-slot img{ width:100%; height:100%; object-fit:cover; border-radius:4px; display:none; }
+.gallery-slot img.loaded{ display:block; }
+.gallery-slot img.loaded ~ .slot-fallback{ display:none; }
+.gallery-slot .slot-fallback{ display:flex; flex-direction:column; gap:8px; }
 .gallery-slot .prompt{ font-family:var(--body); font-style:italic; font-size:12.5px; opacity:.85; }
 
 /* ---------- LETTER ---------- */
@@ -359,6 +364,46 @@ section{
 .entry-card .entry-body{ white-space:pre-wrap; margin-top:10px; }
 .entry-card .entry-actions{ margin-top:10px; display:flex; gap:8px; }
 .empty-state{ font-family:var(--mono); font-size:13px; color:var(--ink-soft); opacity:.8; }
+
+/* ---------- ROMAN (noir novel) section ---------- */
+.roman-section{
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(177,88,63,0.10), transparent 55%),
+    var(--bg);
+}
+.roman-card{
+  background: #1a1512;
+  color: var(--paper);
+  max-width:760px;
+  width:100%;
+  padding: 56px 60px;
+  border-radius:2px;
+  border:1px solid rgba(177,88,63,0.25);
+  box-shadow: 0 30px 70px rgba(0,0,0,.6);
+  position:relative;
+}
+@media (max-width:640px){ .roman-card{ padding:34px 24px; } }
+.roman-card h2{ font-family:var(--display); font-style:italic; color:var(--rose); font-size:clamp(1.6rem,4vw,2.3rem); margin:0 0 6px; }
+.roman-card .case-meta{ font-family:var(--mono); font-size:11px; color:var(--gold); opacity:.8; letter-spacing:1px; margin-bottom:22px; }
+.roman-card p{ margin:0 0 16px; font-size:1.05rem; }
+.roman-card p.dialogue{ padding-left:16px; border-left:2px solid var(--rose); font-style:italic; color:var(--paper-2); }
+.roman-intro{ max-width:680px; text-align:center; margin:0 auto 30px; opacity:.8; font-style:italic; }
+
+.gate{
+  max-width:520px; text-align:center; margin: 30px auto 0;
+  padding:28px; border:1px dashed var(--line); border-radius:6px;
+  background: rgba(177,88,63,0.05);
+}
+.gate p{ font-family:var(--mono); font-size:12.5px; opacity:.85; margin-bottom:16px; }
+.gate-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.gate input{
+  font-family:var(--mono); letter-spacing:4px; text-align:center; font-size:16px;
+  background: var(--paper-2); border:1px solid var(--line); border-radius:4px;
+  padding:10px 14px; width:140px; color:var(--ink);
+}
+.gate-msg{ font-family:var(--mono); font-size:12px; margin-top:12px; min-height:16px; }
+.gate-msg.err{ color:var(--rose); }
+.gate-msg.ok{ color:#8fae6a; }
 
 footer{
   text-align:center; padding:50px 20px 90px;
