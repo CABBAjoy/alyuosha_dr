@@ -56,35 +56,37 @@ const musicBtn = document.getElementById('music-toggle');
 let playing = false;
 let trackIndex = 0;
 
-function loadTrack(i){
-  audio.src = `audio/${PLAYLIST[i]}`;
-}
-loadTrack(trackIndex);
-
-audio.addEventListener('ended', () => {
-  trackIndex = (trackIndex + 1) % PLAYLIST.length;
-  loadTrack(trackIndex);
-  audio.play().catch(() => {});
-});
-
-musicBtn.addEventListener('click', async () => {
-  try{
-    if(!playing){
-      await audio.play();
-      playing = true;
-      musicBtn.textContent = '❚❚';
-      musicBtn.setAttribute('aria-label', 'Остановить фоновую музыку');
-    } else {
-      audio.pause();
-      playing = false;
-      musicBtn.textContent = '▶';
-      musicBtn.setAttribute('aria-label', 'Включить фоновую музыку');
-    }
-  } catch(err){
-    console.warn('Не удалось включить музыку. Добавьте файлы audio/theme1.mp3 и т.д. — см. README.', err);
-    musicBtn.textContent = '?';
+if(audio && musicBtn){
+  function loadTrack(i){
+    audio.src = `audio/${PLAYLIST[i]}`;
   }
-});
+  loadTrack(trackIndex);
+
+  audio.addEventListener('ended', () => {
+    trackIndex = (trackIndex + 1) % PLAYLIST.length;
+    loadTrack(trackIndex);
+    audio.play().catch(() => {});
+  });
+
+  musicBtn.addEventListener('click', async () => {
+    try{
+      if(!playing){
+        await audio.play();
+        playing = true;
+        musicBtn.textContent = '❚❚';
+        musicBtn.setAttribute('aria-label', 'Остановить фоновую музыку');
+      } else {
+        audio.pause();
+        playing = false;
+        musicBtn.textContent = '▶';
+        musicBtn.setAttribute('aria-label', 'Включить фоновую музыку');
+      }
+    } catch(err){
+      console.warn('Не удалось включить музыку. Добавьте файлы audio/theme1.mp3 и т.д. — см. README.', err);
+      musicBtn.textContent = '?';
+    }
+  });
+}
 
 // ---------- notebook (localStorage) ----------
 const STORAGE_KEY = 'alyona-notebook-entries';
@@ -165,28 +167,34 @@ function downloadText(filename, text){
   URL.revokeObjectURL(url);
 }
 
-document.getElementById('save-entry').addEventListener('click', () => {
-  const titleEl = document.getElementById('entry-title');
-  const textEl = document.getElementById('entry-text');
-  const title = titleEl.value.trim();
-  const text = textEl.value.trim();
-  if(!text){ textEl.focus(); return; }
+const saveEntryBtn = document.getElementById('save-entry');
+if(saveEntryBtn){
+  saveEntryBtn.addEventListener('click', () => {
+    const titleEl = document.getElementById('entry-title');
+    const textEl = document.getElementById('entry-text');
+    const title = titleEl.value.trim();
+    const text = textEl.value.trim();
+    if(!text){ textEl.focus(); return; }
 
-  const entries = loadEntries();
-  entries.push({ id: Date.now().toString(36), title, text, date: new Date().toISOString() });
-  saveEntries(entries);
+    const entries = loadEntries();
+    entries.push({ id: Date.now().toString(36), title, text, date: new Date().toISOString() });
+    saveEntries(entries);
 
-  titleEl.value = '';
-  textEl.value = '';
-  renderEntries();
-});
+    titleEl.value = '';
+    textEl.value = '';
+    renderEntries();
+  });
+}
 
-document.getElementById('export-all').addEventListener('click', () => {
-  const entries = loadEntries();
-  if(entries.length === 0) return;
-  const full = entries.map(e => `${e.title || 'Без названия'}\n${formatDate(e.date)}\n\n${e.text}`).join('\n\n' + '—'.repeat(20) + '\n\n');
-  downloadText('блокнот-алёны.txt', full);
-});
+const exportAllBtn = document.getElementById('export-all');
+if(exportAllBtn){
+  exportAllBtn.addEventListener('click', () => {
+    const entries = loadEntries();
+    if(entries.length === 0) return;
+    const full = entries.map(e => `${e.title || 'Без названия'}\n${formatDate(e.date)}\n\n${e.text}`).join('\n\n' + '—'.repeat(20) + '\n\n');
+    downloadText('блокнот-алёны.txt', full);
+  });
+}
 
 renderEntries();
 
@@ -231,3 +239,50 @@ wireGate('dossier-gate-input', 'dossier-gate-submit', 'dossier-gate-msg');
 if(isDossierUnlocked()){
   unlockDossier();
 }
+if(isDossierUnlocked()){
+  unlockDossier();
+}
+
+// ---------- reveal animation ----------
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+},{
+  threshold:0.15
+});
+
+document
+  .querySelectorAll('.page-card, .roman-card')
+  .forEach(card=>{
+    card.classList.add('reveal');
+    revealObserver.observe(card);
+  });
+  // ---------- reading progress ----------
+
+const progressBar = document.querySelector('.reading-progress');
+
+function updateReadingProgress(){
+
+  const scrollTop = window.scrollY;
+
+  const height =
+    document.documentElement.scrollHeight -
+    window.innerHeight;
+
+  const progress =
+    height > 0
+      ? (scrollTop / height) * 100
+      : 0;
+
+  if(progressBar){
+    progressBar.style.width = `${progress}%`;
+  }
+}
+
+window.addEventListener('scroll', updateReadingProgress);
+
+updateReadingProgress();
