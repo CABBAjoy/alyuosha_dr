@@ -453,8 +453,8 @@ section{
     var(--bg);
 }
 .roman-card{
-  background: #574940;
-  color: var(--paper);
+  background: #ece2c8;
+  color: var(--ink);
   max-width:760px;
   width:100%;
   padding: 56px 60px;
