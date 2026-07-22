@@ -506,16 +506,27 @@ footer{
   html{ scroll-behavior:auto; }
   *{ transition:none !important; animation:none !important; }
 }
+/* ---------- reveal animation (только для ПК) ---------- */
+
 .reveal{
-  opacity:0;
-  transform:translateY(40px);
-
-  transition:
-    opacity .8s ease,
-    transform .8s ease;
-}
-
-.reveal.visible{
   opacity:1;
   transform:none;
+}
+
+@media (hover:hover) and (pointer:fine){
+
+  .reveal{
+    opacity:0;
+    transform:translateY(40px);
+
+    transition:
+      opacity .8s ease,
+      transform .8s ease;
+  }
+
+  .reveal.visible{
+    opacity:1;
+    transform:none;
+  }
+
 }
