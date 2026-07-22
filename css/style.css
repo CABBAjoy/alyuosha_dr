@@ -314,7 +314,7 @@ section{
 
 .photo-slot{
   width:100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 1086/1448;
   border:2px dashed var(--ink-soft);
   border-radius:4px;
   display:flex; align-items:center; justify-content:center;
@@ -353,7 +353,7 @@ section{
   gap:16px; max-width:920px; width:100%;
 }
 .gallery-slot{
-  aspect-ratio:4/5;
+  aspect-ratio: 1086/1448;
   border:2px dashed var(--line);
   border-radius:6px;
   overflow:hidden;
