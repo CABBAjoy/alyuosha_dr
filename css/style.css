@@ -457,6 +457,7 @@ section{
   color: var(--ink);
   max-width:760px;
   width:100%;
+  margin: 0 auto;
   padding: 56px 60px;
   border-radius:2px;
   border:1px solid rgba(177,88,63,0.25);
@@ -477,7 +478,7 @@ section{
 .roman-card h2{ font-family:var(--display); font-style:italic; color:var(--rose); font-size:clamp(1.6rem,4vw,2.3rem); margin:0 0 6px; }
 .roman-card .case-meta{ font-family:var(--mono); font-size:11px; color:var(--gold); opacity:.8; letter-spacing:1px; margin-bottom:22px; }
 .roman-card p{ margin:0 0 16px; font-size:1.05rem; }
-.roman-card p.dialogue{ padding-left:16px; border-left:2px solid var(--rose); font-style:italic; color:var(--ink-soft); }
+.roman-card p.dialogue{ padding-left:16px; border-left:2px solid var(--ink-soft); font-style:italic; color:var(--ink-soft); }
 .roman-intro{ max-width:680px; text-align:center; margin:0 auto 30px; opacity:.8; font-style:italic; }
 
 .gate{
