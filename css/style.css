@@ -477,7 +477,7 @@ section{
 .roman-card h2{ font-family:var(--display); font-style:italic; color:var(--rose); font-size:clamp(1.6rem,4vw,2.3rem); margin:0 0 6px; }
 .roman-card .case-meta{ font-family:var(--mono); font-size:11px; color:var(--gold); opacity:.8; letter-spacing:1px; margin-bottom:22px; }
 .roman-card p{ margin:0 0 16px; font-size:1.05rem; }
-.roman-card p.dialogue{ padding-left:16px; border-left:2px solid var(--rose); font-style:italic; color:var(--paper-2); }
+.roman-card p.dialogue{ padding-left:16px; border-left:2px solid var(--rose); font-style:italic; color:var(--ink-soft); }
 .roman-intro{ max-width:680px; text-align:center; margin:0 auto 30px; opacity:.8; font-style:italic; }
 
 .gate{
@@ -489,7 +489,7 @@ section{
 .gate-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 .gate input{
   font-family:var(--mono); letter-spacing:4px; text-align:center; font-size:16px;
-  background: var(--paper-2); border:1px solid var(--line); border-radius:4px;
+  background: var(--ink-soft); border:1px solid var(--line); border-radius:4px;
   padding:10px 14px; width:140px; color:var(--ink);
 }
 .gate-msg{ font-family:var(--mono); font-size:12px; margin-top:12px; min-height:16px; }
@@ -498,7 +498,7 @@ section{
 
 footer{
   text-align:center; padding:50px 20px 90px;
-  font-family:var(--mono); font-size:11px; color:var(--paper); opacity:.4; letter-spacing:1px;
+  font-family:var(--mono); font-size:11px; color:var(--ink); opacity:.4; letter-spacing:1px;
 }
 
 @media (prefers-reduced-motion: reduce){
