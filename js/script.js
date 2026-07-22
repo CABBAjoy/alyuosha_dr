@@ -239,28 +239,37 @@ wireGate('dossier-gate-input', 'dossier-gate-submit', 'dossier-gate-msg');
 if(isDossierUnlocked()){
   unlockDossier();
 }
-if(isDossierUnlocked()){
-  unlockDossier();
-}
 
 // ---------- reveal animation ----------
 
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
-    }
-  });
-},{
-  threshold:0.15
-});
+if ('IntersectionObserver' in window) {
 
-document
-  .querySelectorAll('.page-card, .roman-card')
-  .forEach(card=>{
-    card.classList.add('reveal');
-    revealObserver.observe(card);
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  },{
+    threshold:0.15
   });
+
+  document
+    .querySelectorAll('.page-card, .roman-card')
+    .forEach(card=>{
+      card.classList.add('reveal');
+      revealObserver.observe(card);
+    });
+
+} else {
+
+  document
+    .querySelectorAll('.page-card, .roman-card')
+    .forEach(card=>{
+      card.classList.add('visible');
+    });
+
+}
   // ---------- reading progress ----------
 
 const progressBar = document.querySelector('.reading-progress');
